@@ -1,0 +1,8 @@
+{
+  "name": "ss-app-2",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular",
+  "id": "6995e53c"
+}
