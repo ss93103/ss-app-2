@@ -1,24 +1,53 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>Login</ion-title>
+    <ion-title text-center>Client Login Portal</ion-title>
   </ion-toolbar>
 </ion-header>
  
 <ion-content padding>
-  <form [formGroup]="credentialsForm" (ngSubmit)="onSubmit()">
- 
-    <ion-item>
-      <ion-label position="floating">Email</ion-label>
-      <ion-input type="email" formControlName="email"></ion-input>
-    </ion-item>
- 
-    <ion-item>
-      <ion-label position="floating">Password</ion-label>
-      <ion-input type="password" formControlName="password"></ion-input>
-    </ion-item>
- 
-    <ion-button expand="block" type="submit" [disabled]="!credentialsForm.valid">Login</ion-button>
-    <!-- ion-button expand="full" type="button" (click)="register()" [disabled]="!credentialsForm.valid">Register</ion-button> -->
- 
-  </form>
+
+    <ion-grid>
+        <ion-row justify-content-center>
+
+            <ion-card>
+                <ion-card-header>
+                  <ion-card-subtitle>Welcome!</ion-card-subtitle>
+                  <ion-card-title>Staffing Tools</ion-card-title>
+                </ion-card-header>
+              
+              <ion-card-content>
+
+            <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+                <div text-center>
+                    <ion-img [src]="'assets/mj.png'"></ion-img>
+                    <h4>Please login now</h4>
+                </div>
+                  <form [formGroup]="credentialsForm" (ngSubmit)="onSubmit()">
+                    <ion-item>
+                      <ion-label position="floating">Email</ion-label>
+                      <ion-input type="email" formControlName="email"></ion-input>
+                    </ion-item>
+                
+                    <ion-item>
+                      <ion-label position="floating">Password</ion-label>
+                      <ion-input type="password" formControlName="password"></ion-input>
+                    </ion-item>
+                
+                    <ion-button expand="block" type="submit" [disabled]="!credentialsForm.valid">Login</ion-button>
+                    <!-- ion-button expand="full" type="button" (click)="register()" [disabled]="!credentialsForm.valid">Register</ion-button> -->
+                  </form>
+              </ion-col>
+
+            </ion-card-content>
+          </ion-card>
+
+          </ion-row>
+    </ion-grid>
+
 </ion-content>
+
+<ion-footer>
+    <ion-toolbar>
+      <ion-title text-center>StaffSetter, LLC 2019</ion-title>
+    </ion-toolbar>
+  </ion-footer>
