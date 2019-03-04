@@ -7,36 +7,39 @@
 <ion-content padding>
 
     <ion-grid>
-        <ion-row justify-content-center>
+        <ion-row justify-content-center> 
 
             <ion-card>
-                <ion-card-header>
-                  <ion-card-subtitle>Welcome!</ion-card-subtitle>
-                  <ion-card-title>Staffing Tools</ion-card-title>
-                </ion-card-header>
+              <ion-card-header class="black">
+                <ion-card-subtitle>
+                    <div text-center><ion-img [src]="'assets/ss_logo.png'"></ion-img></div>
+                </ion-card-subtitle>
+                <ion-card-title color="light">      
+                    <div text-center><h5>Welcome! Please login.</h5></div>
+                </ion-card-title>
+              </ion-card-header>
               
               <ion-card-content>
 
-            <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
-                <div text-center>
-                    <ion-img [src]="'assets/mj.png'"></ion-img>
-                    <h4>Please login now</h4>
-                </div>
-                  <form [formGroup]="credentialsForm" (ngSubmit)="onSubmit()">
-                    <ion-item>
-                      <ion-label position="floating">Email</ion-label>
-                      <ion-input type="email" formControlName="email"></ion-input>
-                    </ion-item>
-                
-                    <ion-item>
-                      <ion-label position="floating">Password</ion-label>
-                      <ion-input type="password" formControlName="password"></ion-input>
-                    </ion-item>
-                
-                    <ion-button expand="block" type="submit" [disabled]="!credentialsForm.valid">Login</ion-button>
-                    <!-- ion-button expand="full" type="button" (click)="register()" [disabled]="!credentialsForm.valid">Register</ion-button> -->
-                  </form>
-              </ion-col>
+                <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">                   
+                      <form [formGroup]="credentialsForm" (ngSubmit)="onSubmit()">
+                        <ion-item class="black">
+                          <ion-label position="floating">Email</ion-label>
+                          <ion-input type="email" formControlName="email"></ion-input>
+                        </ion-item>
+                    
+                        <ion-item class="black">
+                          <ion-label position="floating">Password</ion-label>
+                          <ion-input type="password" formControlName="password"></ion-input>
+                        </ion-item>
+                    
+                        <br>
+
+                        <ion-button expand="block" type="submit" [disabled]="!credentialsForm.valid">Login</ion-button>
+
+                        <!-- ion-button expand="full" type="button" (click)="register()" [disabled]="!credentialsForm.valid">Register</ion-button> -->
+                      </form>
+                  </ion-col>
 
             </ion-card-content>
           </ion-card>
