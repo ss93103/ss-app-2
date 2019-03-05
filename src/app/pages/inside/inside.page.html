@@ -1,16 +1,48 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>Inside</ion-title>
+    <ion-title>Client App Home</ion-title>
   </ion-toolbar>
 </ion-header>
  
-<ion-content padding>
-  Welcome to the members only area!
+<ion-content padding text-center>
+  Welcome {{User.email}}<br>
  
-  <p>{{ data }}</p>
+  <h5>Client Name: <b>{{ clientData.client_name }}</b></h5>
+
+  <ion-button expand="small" (click)="logout()">Logout</ion-button>
  
-  <ion-button expand="full" (click)="loadSpecialInfo()">Load Special Info</ion-button>
-  <ion-button expand="full" (click)="logout()">Logout</ion-button>
-  <ion-button expand="full" (click)="clearToken()">Clear JWT</ion-button>
+  <!--
+  <ion-button expand="small" (click)="loadSpecialInfo()">Test Auth</ion-button>
+  -->
+  <ion-button expand="small" (click)="loadClientWorksites()">Load Worksites</ion-button>
+  <!--
+    ion-button expand="small" (click)="clearToken()">Clear JWT</ion-button>
+  -->
+
+  <br>
+  <br>
+
+  <ion-grid *ngIf="clientWorksites.length > 0">
+    <ion-row *ngFor="let w of clientWorksites">
+        <ion-col align-self-start>
+            <ion-button expand="small" (click)="showAlert('This button will take us to a map, where the client can set specific points to allow clocking in/out.')">Edit</ion-button>
+        </ion-col>
+        <ion-col align-self-center>
+          {{w.street1}} {{ w.street2 }}<br>
+          {{ w.city }}, {{ w.state }}<br>
+          {{ w.zip_code }}
+        </ion-col>
+        <ion-col align-self-end>
+          Lat: {{w.latitude}}<br>
+          Lng: {{w.longitude}}
+        </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!--
+  <br><br>
+  {{ clientWorksites | json }}
+  -->
+  
  
 </ion-content>

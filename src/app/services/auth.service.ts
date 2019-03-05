@@ -16,6 +16,7 @@ export class AuthService {
  
   url = environment.url;
   user = null;
+  client_id = null;
   authenticationState = new BehaviorSubject(false);
  
   constructor(private http: HttpClient, private helper: JwtHelperService, private storage: Storage,
@@ -24,6 +25,8 @@ export class AuthService {
       this.checkToken();
     });
   }
+
+  getUser() { return this.user; }
  
   checkToken() {
     this.storage.get(TOKEN_KEY).then(token => {
@@ -70,11 +73,39 @@ export class AuthService {
       this.authenticationState.next(false);
     });
   }
+
+  getClientData() {
+    let url = `${this.url}/api/client`;
+    
+    return this.http.post(url, { client_id: this.user.client_id }).pipe(
+      catchError(e => {
+        let status = e.status;
+        if (status === 401) {
+          this.showAlert('You are not authorized for this!');
+          this.logout();
+        }
+        throw new Error(e);
+      })
+    )
+  }
+
+  getClientWorksites() {
+    let url = `${this.url}/api//ws-locations`;
+    
+    return this.http.post(url, { client_id: this.user.client_id }).pipe(
+      catchError(e => {
+        let status = e.status;
+        if (status === 401) {
+          this.showAlert('You are not authorized for this!');
+          this.logout();
+        }
+        throw new Error(e);
+      })
+    )
+  }
  
   getSpecialData() {
     let url = `${this.url}/api/special`;
-
-    console.log(url);
     
     return this.http.get(url).pipe(
       catchError(e => {
