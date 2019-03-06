@@ -10,6 +10,10 @@ const routes: Routes = [
     loadChildren: './pages/inside/inside.module#InsidePageModule',
     canActivate: [AuthGuardService]
   },
+  { path: 'worksite/:id', 
+    loadChildren: './pages/worksite/worksite.module#WorksitePageModule',
+    canActivate: [AuthGuardService]
+  },
 ];
 
 @NgModule({

@@ -90,9 +90,24 @@ export class AuthService {
   }
 
   getClientWorksites() {
-    let url = `${this.url}/api//ws-locations`;
+    let url = `${this.url}/api/ws-locations`;
     
     return this.http.post(url, { client_id: this.user.client_id }).pipe(
+      catchError(e => {
+        let status = e.status;
+        if (status === 401) {
+          this.showAlert('You are not authorized for this!');
+          this.logout();
+        }
+        throw new Error(e);
+      })
+    )
+  }
+
+  getClientWorksite(worksite_id) {
+    let url = `${this.url}/api/worksite`;
+    
+    return this.http.post(url, { worksite_id: worksite_id }).pipe(
       catchError(e => {
         let status = e.status;
         if (status === 401) {

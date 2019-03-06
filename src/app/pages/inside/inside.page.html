@@ -13,19 +13,14 @@
   Welcome {{User.email}}<br>
  
   <h5>Client Name: <b>{{ clientData.client_name }}</b></h5>
- 
-  <!--
-  <ion-button expand="small" (click)="loadSpecialInfo()">Test Auth</ion-button>
-  -->
+
   <ion-button expand="small" (click)="loadClientWorksites()">Load Worksites</ion-button>
-  <!--
-    ion-button expand="small" (click)="clearToken()">Clear JWT</ion-button>
-  -->
+ 
+  <!-- ion-button expand="small" (click)="loadSpecialInfo()">Test Auth</ion-button> -->
+  <!-- ion-button expand="small" (click)="clearToken()">Clear JWT</ion-button> -->
 
   <br>
-
-  <div #map id="map" style="height:300px;width:100%;"></div>
-
+  <div #map id="map"></div>
   <br>
 
   <ion-item-group *ngIf="clientWorksites.length > 0"> 
@@ -43,7 +38,7 @@
           <ion-text color="secondary">
             <p>Lat: {{w.latitude}} Lng: {{w.longitude}}</p>
           </ion-text>          
-          <ion-button expand="small" (click)="showAlert('This button will take us to a map, where the client can set specific points to allow clocking in/out.')">Edit</ion-button>
+          <ion-button expand="small" (click)="editWorksite(w.id)">Edit</ion-button>
         <br>
       </ion-label>
     </ion-item> 
@@ -52,11 +47,5 @@
 
   <br>
   <ion-button expand="small" (click)="logout()">Logout</ion-button>
-
-  <!--
-  <br><br>
-  {{ clientWorksites | json }}
-  -->
   
- 
 </ion-content>

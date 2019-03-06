@@ -34,6 +34,10 @@ export class InsidePage implements OnInit {
     this.loadClientData();
   }
 
+  editWorksite(id) {
+    this.navCtrl.navigateForward(`/worksite/${id}`);
+  }
+
   ionViewDidEnter() {
     this.plt.ready().then(() => {
       let mapOptions = {
@@ -52,7 +56,7 @@ export class InsidePage implements OnInit {
         this.map.setZoom(16);
         this.addMarker(this.map, pos.coords.latitude, pos.coords.longitude, 'You are here!');
       }).catch((error) => {
-        console.log('Error getting location', error);
+        this.showAlert('Error getting location: ' + JSON.stringify(error));
       });
     
     });
