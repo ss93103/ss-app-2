@@ -50,6 +50,7 @@ export class InsidePage implements OnInit {
         let latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
         this.map.setCenter(latLng);
         this.map.setZoom(16);
+        this.addMarker(this.map, pos.coords.latitude, pos.coords.longitude, 'You are here!');
       }).catch((error) => {
         console.log('Error getting location', error);
       });
@@ -65,6 +66,8 @@ export class InsidePage implements OnInit {
   }
 
   loadClientWorksites() {
+    this.markers = [];
+
     this.authService.getClientWorksites().subscribe(res => { 
       this.clientWorksites = res;
       for(let r of this.clientWorksites) {
@@ -110,7 +113,7 @@ export class InsidePage implements OnInit {
   *    Other Google map functions
   */
 
-  addMarker(map:any, lat:any, lng: any) {
+  addMarker(map:any, lat:any, lng: any, marker_content:string = null) {
     let marker = new google.maps.Marker({
       map: map,
       animation: google.maps.Animation.DROP,
@@ -118,16 +121,26 @@ export class InsidePage implements OnInit {
     });
 
     this.markers.push(marker);
-    let content = "<h4>Information!</h4>"; 
-    //this.addInfoWindow(marker, content);
+    let content = "<p><b>Information!</b><p><p>Address, etc goes here. No big deal.</p>"; 
+    this.addInfoWindow(marker, marker_content || content);
   }
 
   setBounds() {
-    var bounds = new google.maps.LatLngBounds();
+    let bounds = new google.maps.LatLngBounds();
     for (var i=0; i < this.markers.length; i++) {
         bounds.extend(this.markers[i].getPosition());
     }
     this.map.fitBounds(bounds);
   }  
+
+  addInfoWindow(marker, content){
+    let infoWindow = new google.maps.InfoWindow({
+      content: content
+    });
+
+    google.maps.event.addListener(marker, 'click', () => {
+      infoWindow.open(this.map, marker);
+    });
+  }
  
 }
