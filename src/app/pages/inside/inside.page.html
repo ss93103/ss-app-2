@@ -8,8 +8,6 @@
   Welcome {{User.email}}<br>
  
   <h5>Client Name: <b>{{ clientData.client_name }}</b></h5>
-
-  <ion-button expand="small" (click)="logout()">Logout</ion-button>
  
   <!--
   <ion-button expand="small" (click)="loadSpecialInfo()">Test Auth</ion-button>
@@ -19,24 +17,36 @@
     ion-button expand="small" (click)="clearToken()">Clear JWT</ion-button>
   -->
 
-  <br><br>
+  <br>
+
+  <div #map id="map" style="height:300px;width:100%;"></div>
+
+  <br>
 
   <ion-item-group *ngIf="clientWorksites.length > 0"> 
-    <ion-item-divider color="light">Current Worksite Locations for &nbsp;<b>{{clientData.client_name}}</b></ion-item-divider> 
-      <ion-item *ngFor="let w of clientWorksites" align-items-center>
-        <ion-label text-center>
-            <ion-text color="primary">
-                <h3>{{w.street1}} {{ w.street2 }}</h3>
-              </ion-text>
-              <p>{{ w.city }}, {{ w.state }} {{ w.zip_code }} </p>
-              <ion-text color="secondary">
-                <p>Lat: {{w.latitude}} Lng: {{w.longitude}}</p>
-            </ion-text>          
-            <ion-button expand="small" (click)="showAlert('This button will take us to a map, where the client can set specific points to allow clocking in/out.')">Edit</ion-button>
-          <br>
-        </ion-label>
-      </ion-item> 
+
+    <ion-item-divider color="light">
+      Current Worksite Locations for &nbsp;<b>{{clientData.client_name}}</b>
+    </ion-item-divider> 
+
+    <ion-item *ngFor="let w of clientWorksites" align-items-center>
+      <ion-label text-center>
+          <ion-text color="primary">
+              <h3>{{w.street1}} {{ w.street2 }}</h3>
+          </ion-text>
+          <p>{{ w.city }}, {{ w.state }} {{ w.zip_code }} </p>
+          <ion-text color="secondary">
+            <p>Lat: {{w.latitude}} Lng: {{w.longitude}}</p>
+          </ion-text>          
+          <ion-button expand="small" (click)="showAlert('This button will take us to a map, where the client can set specific points to allow clocking in/out.')">Edit</ion-button>
+        <br>
+      </ion-label>
+    </ion-item> 
+
   </ion-item-group>
+
+  <br>
+  <ion-button expand="small" (click)="logout()">Logout</ion-button>
 
   <!--
   <br><br>

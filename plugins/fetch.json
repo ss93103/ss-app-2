@@ -64,5 +64,15 @@
     },
     "is_top_level": true,
     "variables": {}
+  },
+  "cordova-plugin-geolocation": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-geolocation@4.0.1"
+    },
+    "is_top_level": true,
+    "variables": {
+      "GEOLOCATION_USAGE_DESCRIPTION": "Set locations for associates to clock in and clock out."
+    }
   }
 }

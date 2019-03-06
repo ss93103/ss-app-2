@@ -1,7 +1,10 @@
 import { AuthService } from './../../services/auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { ToastController, AlertController } from '@ionic/angular';
+import { ToastController, AlertController, NavController, Platform } from '@ionic/angular';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+
+declare var google;
  
 @Component({
   selector: 'app-inside',
@@ -9,7 +12,10 @@ import { ToastController, AlertController } from '@ionic/angular';
   styleUrls: ['./inside.page.scss'],
 })
 export class InsidePage implements OnInit {
- 
+  @ViewChild('map') mapElement: ElementRef;
+  map: any;
+  markers: any = [];
+
   public clientData:any = { id: 0, client_id: 0, client_name: '' };
   public clientWorksites:any = []
   public User = { email: '' };
@@ -18,11 +24,37 @@ export class InsidePage implements OnInit {
  
   constructor(private authService: AuthService, 
               private storage: Storage, 
+              public navCtrl: NavController, 
+              private plt: Platform, 
+              private geolocation: Geolocation,
               private alertController: AlertController,
               private toastController: ToastController) { }
  
   ngOnInit() {
     this.loadClientData();
+  }
+
+  ionViewDidEnter() {
+    this.plt.ready().then(() => {
+      let mapOptions = {
+        zoom: 13,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: true
+      }
+
+      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+
+      this.geolocation.getCurrentPosition().then(pos => {
+        let latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+        this.map.setCenter(latLng);
+        this.map.setZoom(16);
+      }).catch((error) => {
+        console.log('Error getting location', error);
+      });
+    
+    });
   }
 
   loadClientData() {
@@ -35,6 +67,10 @@ export class InsidePage implements OnInit {
   loadClientWorksites() {
     this.authService.getClientWorksites().subscribe(res => { 
       this.clientWorksites = res;
+      for(let r of this.clientWorksites) {
+        this.addMarker(this.map, r.latitude, r.longitude);
+      }
+      this.setBounds();
     })
   }
  
@@ -69,5 +105,29 @@ export class InsidePage implements OnInit {
     });
     toast.then(toast => toast.present());
   }
+
+  /*
+  *    Other Google map functions
+  */
+
+  addMarker(map:any, lat:any, lng: any) {
+    let marker = new google.maps.Marker({
+      map: map,
+      animation: google.maps.Animation.DROP,
+      position: { lat: lat, lng: lng }, //map.getCenter()
+    });
+
+    this.markers.push(marker);
+    let content = "<h4>Information!</h4>"; 
+    //this.addInfoWindow(marker, content);
+  }
+
+  setBounds() {
+    var bounds = new google.maps.LatLngBounds();
+    for (var i=0; i < this.markers.length; i++) {
+        bounds.extend(this.markers[i].getPosition());
+    }
+    this.map.fitBounds(bounds);
+  }  
  
 }
