@@ -109,8 +109,9 @@ export class InsidePage implements OnInit {
     toast.then(toast => toast.present());
   }
 
-  /*
-  *    Other Google map functions
+
+ /*
+  *    Google map functions - todo: update to use ionic google maps plugin
   */
 
   addMarker(map:any, lat:any, lng: any, marker_content:string = null) {
@@ -142,5 +143,32 @@ export class InsidePage implements OnInit {
       infoWindow.open(this.map, marker);
     });
   }
+
+    // onSuccess Callback
+    // This method accepts a Position object, which contains the
+    // current GPS coordinates
+    //
+    onSuccess(position) {
+      this.showAlert('Latitude: '          + position.coords.latitude          + '\n' +
+            'Longitude: '         + position.coords.longitude         + '\n' +
+            'Altitude: '          + position.coords.altitude          + '\n' +
+            'Accuracy: '          + position.coords.accuracy          + '\n' +
+            'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+            'Heading: '           + position.coords.heading           + '\n' +
+            'Speed: '             + position.coords.speed             + '\n' +
+            'Timestamp: '         + position.timestamp                + '\n');
+  };
+
+  // onError Callback receives a PositionError object
+  //
+  onError(error) {
+      this.showAlert('code: '    + error.code    + '\n' +
+            'message: ' + error.message + '\n');
+  }
+
+
+  /*
+  *    END Other Google map functions
+  */
  
 }
