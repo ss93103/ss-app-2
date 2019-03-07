@@ -184,29 +184,21 @@ export class InsidePage implements OnInit {
       for(let r of this.clientWorksites) {
           let loc: LatLng = new LatLng(r.latitude, r.longitude);
 
-          //console.log(loc);
           bounds.push(loc);
-          
-          /*
-          let marker: Marker = await this.map.addMarker({
-            title: 'Worksite #' + cnt,
-            snippet: 'Worksite info here',
-            position: loc as LatLng,
-            animation: GoogleMapsAnimation.BOUNCE
-          });
-          */
 
           this.map.addMarker({
-            title: 'My Marker',
+            title: 'Worksite #' + cnt,
+            snippew: 'Worksite info here...',
             icon: 'blue',
             animation: 'DROP',
             position: {
-              lat: -33,
-              lng: 773231
+              lat: r.latitude,
+              lng: r.longitude
            }
           })
           .then(marker => {
             this.markerArray.push(marker);
+            
             marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
               this.showToast('Marker Clicked');
             });
