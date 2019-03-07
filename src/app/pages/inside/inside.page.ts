@@ -182,30 +182,38 @@ export class InsidePage implements OnInit {
       let cnt = 1;
 
       for(let r of this.clientWorksites) {
-          let loc: ILatLng = new LatLng(r.latitude, r.longitude);
+          let loc: LatLng = new LatLng(r.latitude, r.longitude);
 
           //console.log(loc);
           bounds.push(loc);
           
+          /*
           let marker: Marker = await this.map.addMarker({
             title: 'Worksite #' + cnt,
             snippet: 'Worksite info here',
-            position: loc,
+            position: loc as LatLng,
             animation: GoogleMapsAnimation.BOUNCE
+          });
+          */
+
+          this.map.addMarker({
+            title: 'My Marker',
+            icon: 'blue',
+            animation: 'DROP',
+            position: {
+              lat: -33,
+              lng: 773231
+           }
+          })
+          .then(marker => {
+            this.markerArray.push(marker);
+            marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+              this.showToast('Marker Clicked');
+            });
           });
 
           cnt ++;
 
-          /*
-
-          // If clicked it, display the alert
-          marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-            this.showToast('clicked!');
-          });
-
-
-          this.markerArray.push(marker);
-          */
       }
 
       if( bounds && bounds.length > 0 ) this.map.animateCamera({ target: bounds }); // resize map to show all markers
