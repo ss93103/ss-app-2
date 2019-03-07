@@ -12,7 +12,6 @@ import {
   GoogleMapsAnimation,
   MyLocation,
   LatLng,
-  LatLngBounds,
 } from '@ionic-native/google-maps';
 
 @Component({
@@ -42,7 +41,6 @@ export class InsidePage implements OnInit {
               private toastController: ToastController) { }
  
   async ngOnInit() {
-    // Since ngOnInit() is executed before `deviceready` event,
     await this.platform.ready();
 
     if( this.markerArray == undefined ) this.markerArray = [];
@@ -87,7 +85,7 @@ export class InsidePage implements OnInit {
 
       // add a marker
       let marker: Marker = this.map.addMarkerSync({
-        title: 'Different Plugin',
+        title: 'Hello!',
         snippet: 'You are here...',
         position: location.latLng,
         animation: GoogleMapsAnimation.BOUNCE
@@ -155,6 +153,7 @@ export class InsidePage implements OnInit {
   }
 
   setBounds() {
+    if( this.markerArray && this.markerArray.length )
     this.map.animateCamera({
       target: this.markerArray
     });
@@ -170,13 +169,19 @@ export class InsidePage implements OnInit {
   loadClientWorksites() {
     this.clearMarkers();
 
+    this.showAlert('Hello?');
+    
     this.authService.getClientWorksites().subscribe(res => { 
       this.clientWorksites = res;
       let bounds = [];
 
       for(let r of this.clientWorksites) {
-          let loc:LatLng = new LatLng(r.latitude, r.longitude);
+          let loc = new LatLng(r.latitude, r.longitude);
+
+          console.log(loc);
+
           bounds.push(loc);
+
           let marker: Marker = this.map.addMarkerSync({
             title: 'StaffSetter 2019',
             snippet: 'You are here...',
@@ -192,7 +197,7 @@ export class InsidePage implements OnInit {
           this.markerArray.push(marker);
       }
 
-      this.map.animateCamera({ target: bounds }); // resize map to show all markers
+      if( bounds && bounds.length > 0 ) this.map.animateCamera({ target: bounds }); // resize map to show all markers
     })
   }
  

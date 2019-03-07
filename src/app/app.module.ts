@@ -12,6 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { Storage, IonicStorageModule } from '@ionic/storage';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { GoogleMaps } from '@ionic-native/google-maps';
 
 //import { Geolocation } from '@ionic-native/geolocation/ngx';
  
@@ -45,6 +46,7 @@ export function jwtOptionsFactory(storage) {
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    GoogleMaps,
   ],
   bootstrap: [AppComponent]
 })
