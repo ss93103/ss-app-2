@@ -65,14 +65,15 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-geolocation": {
+  "cordova-plugin-googlemaps": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-geolocation@4.0.1"
+      "id": "https://github.com/mapsplugin/cordova-plugin-googlemaps#multiple_maps"
     },
     "is_top_level": true,
     "variables": {
-      "GEOLOCATION_USAGE_DESCRIPTION": "Set locations for associates to clock in and clock out."
+      "API_KEY_FOR_ANDROID": "AIzaSyAk0wdLVFOUF0mft-gceI_eejtDpfaPFGI",
+      "API_KEY_FOR_IOS": "AIzaSyAk0wdLVFOUF0mft-gceI_eejtDpfaPFGI"
     }
   }
 }

@@ -1,20 +1,31 @@
 import { AuthService } from './../../services/auth.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { ToastController, AlertController, NavController, Platform } from '@ionic/angular';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { ToastController, AlertController, NavController, Platform, LoadingController } from '@ionic/angular';
+//import { Geolocation } from '@ionic-native/geolocation/ngx';
 
-declare var google;
- 
+import {
+  GoogleMaps,
+  GoogleMap,
+  GoogleMapsEvent,
+  Marker,
+  GoogleMapsAnimation,
+  MyLocation,
+  LatLng,
+  LatLngBounds,
+} from '@ionic-native/google-maps';
+
 @Component({
   selector: 'app-inside',
   templateUrl: './inside.page.html',
   styleUrls: ['./inside.page.scss'],
 })
 export class InsidePage implements OnInit {
-  @ViewChild('map') mapElement: ElementRef;
-  map: any;
-  markers: any = [];
+  //@ViewChild('map') mapElement: ElementRef;
+
+  map: GoogleMap;
+  loading: any;
+  markerArray = [];
 
   public clientData:any = { id: 0, client_id: 0, client_name: '' };
   public clientWorksites:any = []
@@ -23,21 +34,96 @@ export class InsidePage implements OnInit {
   data = {};
  
   constructor(private authService: AuthService, 
+              public loadingCtrl: LoadingController,
               private storage: Storage, 
               public navCtrl: NavController, 
-              private plt: Platform, 
-              private geolocation: Geolocation,
+              private platform: Platform, 
               private alertController: AlertController,
               private toastController: ToastController) { }
  
-  ngOnInit() {
-    this.loadClientData();
+  async ngOnInit() {
+    // Since ngOnInit() is executed before `deviceready` event,
+    await this.platform.ready();
+
+    if( this.markerArray == undefined ) this.markerArray = [];
+
+    await this.loadMap();
+  }
+
+  loadMap() {
+    this.map = GoogleMaps.create('map_canvas', {
+      camera: {
+        target: {
+          lat: 43.0741704,
+          lng: -89.3809802
+        },
+        zoom: 18,
+        tilt: 30
+      }
+    });
+   
+  }
+
+  async onButtonClick() {
+    this.map.clear();
+
+    this.loading = await this.loadingCtrl.create({
+      message: 'Please wait...'
+    });
+
+    await this.loading.present();
+
+    // Get the location of you
+    this.map.getMyLocation().then((location: MyLocation) => {
+      this.loading.dismiss();
+      //console.log(JSON.stringify(location, null ,2));
+
+      // Move the map camera to the location with animation
+      this.map.animateCamera({
+        target: location.latLng,
+        zoom: 17,
+        tilt: 30
+      });
+
+      // add a marker
+      let marker: Marker = this.map.addMarkerSync({
+        title: 'Different Plugin',
+        snippet: 'You are here...',
+        position: location.latLng,
+        animation: GoogleMapsAnimation.BOUNCE
+      });
+
+      // show the infoWindow
+      marker.showInfoWindow();
+
+      // If clicked it, display the alert
+      marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+        this.showToast('clicked!');
+      });
+
+      this.markerArray.push(marker);
+    })
+    .catch(err => {
+      this.loading.dismiss();
+      this.showToast(err.error_message);
+    });
+  }
+
+  async showToast(message: string) {
+    let toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'middle'
+    });
+
+    toast.present();
   }
 
   editWorksite(id) {
     this.navCtrl.navigateForward(`/worksite/${id}`);
   }
 
+  /*
   ionViewDidEnter() {
     this.plt.ready().then(() => {
       let mapOptions = {
@@ -61,6 +147,18 @@ export class InsidePage implements OnInit {
     
     });
   }
+*/
+
+  clearMarkers() {
+    let i = this.markerArray.length;
+    while(i--) this.markerArray[i].remove();
+  }
+
+  setBounds() {
+    this.map.animateCamera({
+      target: this.markerArray
+    });
+  }  
 
   loadClientData() {
     this.authService.getClientData().subscribe(res => { 
@@ -70,14 +168,31 @@ export class InsidePage implements OnInit {
   }
 
   loadClientWorksites() {
-    this.markers = [];
+    this.clearMarkers();
 
     this.authService.getClientWorksites().subscribe(res => { 
       this.clientWorksites = res;
+      let bounds = [];
+
       for(let r of this.clientWorksites) {
-        this.addMarker(this.map, r.latitude, r.longitude);
+          let loc:LatLng = new LatLng(r.latitude, r.longitude);
+          bounds.push(loc);
+          let marker: Marker = this.map.addMarkerSync({
+            title: 'StaffSetter 2019',
+            snippet: 'You are here...',
+            position: loc,
+            animation: GoogleMapsAnimation.BOUNCE
+          });
+
+          // If clicked it, display the alert
+          marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+            this.showToast('clicked!');
+          });
+
+          this.markerArray.push(marker);
       }
-      this.setBounds();
+
+      this.map.animateCamera({ target: bounds }); // resize map to show all markers
     })
   }
  
@@ -118,6 +233,7 @@ export class InsidePage implements OnInit {
   *    Google map functions - todo: update to use ionic google maps plugin
   */
 
+  /*
   addMarker(map:any, lat:any, lng: any, marker_content:string = null) {
     let marker = new google.maps.Marker({
       map: map,
@@ -169,6 +285,8 @@ export class InsidePage implements OnInit {
       this.showAlert('code: '    + error.code    + '\n' +
             'message: ' + error.message + '\n');
   }
+
+  */
 
 
   /*

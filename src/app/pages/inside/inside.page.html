@@ -19,9 +19,9 @@
   <!-- ion-button expand="small" (click)="loadSpecialInfo()">Test Auth</ion-button> -->
   <!-- ion-button expand="small" (click)="clearToken()">Clear JWT</ion-button> -->
 
-  <br>
-  <div #map id="map"></div>
-  <br>
+  <div id="map_canvas">
+      <ion-button ion-button (click)="onButtonClick()">Demo</ion-button>
+  </div>
 
   <ion-item-group *ngIf="clientWorksites.length > 0"> 
 
