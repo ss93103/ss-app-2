@@ -124,31 +124,6 @@ export class InsidePage implements OnInit {
     this.navCtrl.navigateForward(`/worksite/${id}`);
   }
 
-  /*
-  ionViewDidEnter() {
-    this.plt.ready().then(() => {
-      let mapOptions = {
-        zoom: 13,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        mapTypeControl: false,
-        streetViewControl: false,
-        fullscreenControl: true
-      }
-
-      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-
-      this.geolocation.getCurrentPosition().then(pos => {
-        let latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-        this.map.setCenter(latLng);
-        this.map.setZoom(16);
-        this.addMarker(this.map, pos.coords.latitude, pos.coords.longitude, 'You are here!');
-      }).catch((error) => {
-        this.showAlert('Error getting location: ' + JSON.stringify(error));
-      });
-    
-    });
-  }
-*/
 
   clearMarkers() {
     let i = this.markerArray.length;
@@ -186,7 +161,7 @@ export class InsidePage implements OnInit {
 
           this.map.addMarker({
             title: 'Worksite #' + cnt,
-            snippew: 'Worksite info here...',
+            snippet: 'Worksite info here...<br><br>Add some lines...',
             icon: 'blue',
             animation: 'DROP',
             position: {
@@ -198,7 +173,7 @@ export class InsidePage implements OnInit {
             this.markerArray.push(marker);
 
             marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-              this.showToast('Marker Clicked');
+              this.showAlert('Marker Clicked');
             });
           });
 
@@ -244,68 +219,4 @@ export class InsidePage implements OnInit {
   }
 
 
- /*
-  *    Google map functions - todo: update to use ionic google maps plugin
-  */
-
-  /*
-  addMarker(map:any, lat:any, lng: any, marker_content:string = null) {
-    let marker = new google.maps.Marker({
-      map: map,
-      animation: google.maps.Animation.DROP,
-      position: { lat: lat, lng: lng }, //map.getCenter()
-    });
-
-    this.markers.push(marker);
-    let content = "<p><b>Information!</b><p><p>Address, etc goes here. No big deal.</p>"; 
-    this.addInfoWindow(marker, marker_content || content);
-  }
-
-  setBounds() {
-    let bounds = new google.maps.LatLngBounds();
-    for (var i=0; i < this.markers.length; i++) {
-        bounds.extend(this.markers[i].getPosition());
-    }
-    this.map.fitBounds(bounds);
-  }  
-
-  addInfoWindow(marker, content){
-    let infoWindow = new google.maps.InfoWindow({
-      content: content
-    });
-
-    google.maps.event.addListener(marker, 'click', () => {
-      infoWindow.open(this.map, marker);
-    });
-  }
-
-    // onSuccess Callback
-    // This method accepts a Position object, which contains the
-    // current GPS coordinates
-    //
-    onSuccess(position) {
-      this.showAlert('Latitude: '          + position.coords.latitude          + '\n' +
-            'Longitude: '         + position.coords.longitude         + '\n' +
-            'Altitude: '          + position.coords.altitude          + '\n' +
-            'Accuracy: '          + position.coords.accuracy          + '\n' +
-            'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
-            'Heading: '           + position.coords.heading           + '\n' +
-            'Speed: '             + position.coords.speed             + '\n' +
-            'Timestamp: '         + position.timestamp                + '\n');
-  };
-
-  // onError Callback receives a PositionError object
-  //
-  onError(error) {
-      this.showAlert('code: '    + error.code    + '\n' +
-            'message: ' + error.message + '\n');
-  }
-
-  */
-
-
-  /*
-  *    END Other Google map functions
-  */
- 
 }
