@@ -176,8 +176,6 @@ export class InsidePage implements OnInit {
     this.authService.getClientWorksites().subscribe(async (res) => { 
       this.clientWorksites = res;
 
-      this.showAlert(JSON.stringify(res));
-
       let bounds = [];
       let cnt = 1;
 
@@ -198,7 +196,7 @@ export class InsidePage implements OnInit {
           })
           .then(marker => {
             this.markerArray.push(marker);
-            
+
             marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
               this.showToast('Marker Clicked');
             });
