@@ -8,10 +8,10 @@ import {
   GoogleMaps,
   GoogleMap,
   GoogleMapsEvent,
+  LatLng,
   Marker,
   GoogleMapsAnimation,
   MyLocation,
-  LatLng,
 } from '@ionic-native/google-maps';
 
 @Component({
@@ -44,6 +44,8 @@ export class InsidePage implements OnInit {
     await this.platform.ready();
 
     if( this.markerArray == undefined ) this.markerArray = [];
+
+    this.loadClientData();
 
     await this.loadMap();
   }
@@ -170,9 +172,12 @@ export class InsidePage implements OnInit {
     this.clearMarkers();
 
     this.showAlert('Hello?');
-    
+
     this.authService.getClientWorksites().subscribe(res => { 
       this.clientWorksites = res;
+
+      console.log(res);
+
       let bounds = [];
 
       for(let r of this.clientWorksites) {
