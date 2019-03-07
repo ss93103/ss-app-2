@@ -8,6 +8,7 @@ import {
   GoogleMaps,
   GoogleMap,
   GoogleMapsEvent,
+  ILatLng,
   LatLng,
   Marker,
   GoogleMapsAnimation,
@@ -179,18 +180,13 @@ export class InsidePage implements OnInit {
 
       let bounds = [];
 
-      /*
-
       for(let r of this.clientWorksites) {
-
-          console.log(r);
-
-          let loc: LatLng = new LatLng(r.latitude, r.longitude);
+          let loc: ILatLng = new LatLng(r.latitude, r.longitude);
 
           console.log(loc);
-
           bounds.push(loc);
 
+          /*
           let marker: Marker = this.map.addMarkerSync({
             title: 'StaffSetter 2019',
             snippet: 'You are here...',
@@ -203,11 +199,13 @@ export class InsidePage implements OnInit {
             this.showToast('clicked!');
           });
 
+          
           this.markerArray.push(marker);
+          */
       }
 
       if( bounds && bounds.length > 0 ) this.map.animateCamera({ target: bounds }); // resize map to show all markers
-      */
+      
     })
   }
  
