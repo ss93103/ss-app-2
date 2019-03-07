@@ -170,36 +170,40 @@ export class InsidePage implements OnInit {
     })
   }
 
-  loadClientWorksites() {
+  async loadClientWorksites() {
     this.clearMarkers();
 
-    this.authService.getClientWorksites().subscribe(res => { 
+    this.authService.getClientWorksites().subscribe(async (res) => { 
       this.clientWorksites = res;
 
       this.showAlert(JSON.stringify(res));
 
       let bounds = [];
+      let cnt = 1;
 
       for(let r of this.clientWorksites) {
           let loc: ILatLng = new LatLng(r.latitude, r.longitude);
 
-          console.log(loc);
+          //console.log(loc);
           bounds.push(loc);
-
-          /*
-          let marker: Marker = this.map.addMarkerSync({
-            title: 'StaffSetter 2019',
-            snippet: 'You are here...',
+          
+          let marker: Marker = await this.map.addMarker({
+            title: 'Worksite #' + cnt,
+            snippet: 'Worksite info here',
             position: loc,
             animation: GoogleMapsAnimation.BOUNCE
           });
+
+          cnt ++;
+
+          /*
 
           // If clicked it, display the alert
           marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
             this.showToast('clicked!');
           });
 
-          
+
           this.markerArray.push(marker);
           */
       }
