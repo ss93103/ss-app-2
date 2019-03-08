@@ -8,7 +8,6 @@ import {
   GoogleMaps,
   GoogleMap,
   GoogleMapsEvent,
-  ILatLng,
   LatLng,
   Marker,
   GoogleMapsAnimation,
@@ -21,7 +20,7 @@ import {
   styleUrls: ['./inside.page.scss'],
 })
 export class InsidePage implements OnInit {
-  //@ViewChild('map') mapElement: ElementRef;
+  @ViewChild('map_canvas') mapElement: ElementRef;
 
   map: GoogleMap;
   loading: any;
@@ -59,7 +58,7 @@ export class InsidePage implements OnInit {
           lng: -89.3809802
         },
         zoom: 18,
-        tilt: 30
+        tilt: 10
       }
     });
    
@@ -99,7 +98,7 @@ export class InsidePage implements OnInit {
 
       // If clicked it, display the alert
       marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-        this.showToast('clicked!');
+        this.showAlert('You are here!');
       });
 
       this.markerArray.push(marker);
@@ -161,7 +160,7 @@ export class InsidePage implements OnInit {
 
           this.map.addMarker({
             title: 'Worksite #' + cnt,
-            snippet: 'Worksite info here...<br><br>Add some lines...',
+            snippet: 'Worksite info here...Add some lines...',
             icon: 'blue',
             animation: 'DROP',
             position: {

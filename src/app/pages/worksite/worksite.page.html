@@ -1,15 +1,35 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Worksite Location Geo Editor</ion-title>
+    <ion-title>Set Clock In Point(s)</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-Editing worksite_id: {{ worksite_id }}
+<ion-content padding text-center>
 
-<br>
-<div #map id="map"></div>
+Editing Worksite # {{ worksite_id }} <br>
 <br>
 
+<ion-label *ngIf="Worksite.id" text-center>
+    <ion-text color="primary">
+        <h3>{{ Worksite.street1 }} {{ Worksite.street2 }}</h3>
+    </ion-text>
+    <p>{{ Worksite.city }}, {{ Worksite.state }} {{ Worksite.zip_code }} </p>
+    <ion-text color="secondary">
+      <p>Lat: {{ Worksite.latitude }} Lng: {{ Worksite.longitude }}</p>
+    </ion-text>          
+  <br>
+</ion-label>
+
+<div id="map_canvas">
+  <ion-button size="small" ion-button (click)="addTimeClockGeoPoint()">Add Time Clock GeoPoint</ion-button>
+</div>
+
+{{ Worksite | json }}
+
+<br>
+<br>
+Locations:<br>
+
+{{ worksiteLocations | json }}
 
 </ion-content>

@@ -118,7 +118,53 @@ export class AuthService {
       })
     )
   }
- 
+
+  getWorksiteLocations(worksite_id) {
+    let url = `${this.url}/api/worksite-gps/query`;
+    
+    return this.http.post(url, { worksite_id: worksite_id }).pipe(
+      catchError(e => {
+        let status = e.status;
+        if (status === 401) {
+          this.showAlert('You are not authorized for this!');
+          this.logout();
+        }
+        throw new Error(e);
+      })
+    )  
+  }
+
+  deleteWorksiteLocation(id) {
+    let url = `${this.url}/api/worksite-gps/delete`;
+    
+    return this.http.post(url, { id: id }).pipe(
+      catchError(e => {
+        let status = e.status;
+        if (status === 401) {
+          this.showAlert('You are not authorized for this!');
+          this.logout();
+        }
+        throw new Error(e);
+      })
+    )  
+  }
+
+  createWorksiteLocation(record) {
+    let url = `${this.url}/api/worksite-gps/create`;
+    
+    return this.http.post(url, record).pipe(
+      catchError(e => {
+        let status = e.status;
+        if (status === 401) {
+          this.showAlert('You are not authorized for this!');
+          this.logout();
+        }
+        throw new Error(e);
+      })
+    )  
+  }
+
+  
   getSpecialData() {
     let url = `${this.url}/api/special`;
     

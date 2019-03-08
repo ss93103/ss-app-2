@@ -1,7 +1,20 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Platform } from '@ionic/angular';
-//import { Geolocation } from '@ionic-native/geolocation/ngx';
+
+import {
+  GoogleMaps,
+  GoogleMap,
+  GoogleMapsEvent,
+  ILatLng,
+  Circle,
+  LatLng,
+  Marker,
+  Spherical,
+  GoogleMapsAnimation,
+  MyLocation,
+} from '@ionic-native/google-maps';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 @Component({
@@ -10,48 +23,77 @@ import { Platform } from '@ionic/angular';
   styleUrls: ['./worksite.page.scss'],
 })
 export class WorksitePage implements OnInit {
-  @ViewChild('map') mapElement: ElementRef;
-  map: any;
-  markers: any = [];  
-  worksite_id = null;
+  @ViewChild('map_canvas') mapElement: ElementRef;
 
+  map: any;
+  worksite_id = null;
+  worksiteLocations:any = [];
+  Worksite:any = { latitude: 0, longitude: 0}
+  User = { email: '' };
+  markerArray = [];
 
   constructor(private activeRoute: ActivatedRoute,
-              private plt: Platform,
+              private authService: AuthService,
+              private platform: Platform,
               ) { }
 
-  ngOnInit() {
+              
+  async ngOnInit() {
     this.worksite_id = this.activeRoute.snapshot.paramMap.get('id');
+
+    await this.platform.ready();
+    await this.loadWorksite();
+    await this.loadWorksiteLocations();
   }
 
- /* 
-  ionViewDidEnter() {
-    this.plt.ready().then(() => {
+  loadMap(lat, lng) {
+    let center: ILatLng = {"lat": lat, "lng": lng};
+    let radius = 400;  // radius (meter)
 
-      let mapOptions = {
-        zoom: 13,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        mapTypeControl: false,
-        streetViewControl: false,
-        fullscreenControl: true
-      }
-
-      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-
-      this.map.setCenter({ lat: 37.809326, lng: -122.409981 });
-      this.map.setZoom(17);
-      this.geolocation.getCurrentPosition().then(pos => {
-        let latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-        this.map.setCenter(latLng);
-        this.map.setZoom(16);
-        this.addMarker(this.map, pos.coords.latitude, pos.coords.longitude, 'You are here!');
-      }).catch((error) => {
-        console.log('Error getting location', error);
-      });
-    
+    // Calculate the positions
+    let positions: ILatLng[] = [0, 90, 180, 270].map((degree: number) => {
+      return Spherical.computeOffset(center, radius, degree);
     });
+
+    this.map = GoogleMaps.create('map_canvas', {
+      camera: {
+        target: positions,
+        padding: 100,
+        zoom: 17,
+        tilt: 10
+      }
+    });
+
+    let circle: Circle = this.map.addCircleSync({
+      'center': center,
+      'radius': radius,
+      'fillOpacity': 0.75,
+      'strokeColor' : '#71cce7',
+      'strokeWidth': 1,
+      'fillColor' : '#71cce7'
+    });
+   
   }
-  */
+
+  loadWorksite() {
+    this.authService.getClientWorksite(this.worksite_id).subscribe(async res => {
+      this.Worksite = res;
+      await this.loadMap(this.Worksite.latitude, this.Worksite.longitude);
+    })
+  }
+
+  loadWorksiteLocations() {
+    this.authService.getWorksiteLocations(this.worksite_id).subscribe(res => { 
+      this.worksiteLocations = res;
+      this.User = this.authService.getUser();
+    })  
+  }
+
+  addTimeClockGeoPoint() {
+
+  }
+
+
   
 
 }
