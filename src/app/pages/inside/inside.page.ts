@@ -13,6 +13,7 @@ import {
   GoogleMapsAnimation,
   MyLocation,
 } from '@ionic-native/google-maps';
+import { SWITCH_TEMPLATE_REF_FACTORY__POST_R3__ } from '@angular/core/src/linker/template_ref';
 
 @Component({
   selector: 'app-inside',
@@ -45,17 +46,17 @@ export class InsidePage implements OnInit {
 
     if( this.markerArray == undefined ) this.markerArray = [];
 
-    this.loadClientData();
+    await this.loadClientData();
+    await this.loadClientWorksites();
 
-    await this.loadMap();
   }
 
-  loadMap() {
+  loadMap(lat, lng) {
     this.map = GoogleMaps.create('map_canvas', {
       camera: {
         target: {
-          lat: 43.0741704,
-          lng: -89.3809802
+          lat: lat,
+          lng: lng
         },
         zoom: 18,
         tilt: 10
@@ -64,6 +65,7 @@ export class InsidePage implements OnInit {
    
   }
 
+  /*
   async onButtonClick() {
     this.map.clear();
 
@@ -108,6 +110,7 @@ export class InsidePage implements OnInit {
       this.showToast(err.error_message);
     });
   }
+  */
 
   async showToast(message: string) {
     let toast = await this.toastController.create({
@@ -149,6 +152,15 @@ export class InsidePage implements OnInit {
 
     this.authService.getClientWorksites().subscribe(async (res) => { 
       this.clientWorksites = res;
+      let lat_start = 40.748817;
+      let lng_start =  -73.985428;
+
+      if( this.clientWorksites && this.clientWorksites.length ) {
+        lat_start = this.clientWorksites[0].latitude;
+        lng_start = this.clientWorksites[0].longitude;
+      }
+
+      await this.loadMap(lat_start, lng_start);
 
       let bounds = [];
       let cnt = 1;
