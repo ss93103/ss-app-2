@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Platform, LoadingController } from '@ionic/angular';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
 import {
   GoogleMaps,
@@ -15,6 +16,7 @@ import {
   GoogleMapsAnimation,
   MyLocation,
 } from '@ionic-native/google-maps';
+
 import { AuthService } from 'src/app/services/auth.service';
 
 
@@ -32,12 +34,17 @@ export class WorksitePage implements OnInit {
   Worksite:any = { latitude: 0, longitude: 0}
   User = { email: '' };
   loading: any;
+  inForm:boolean = false;
+
   markerArray = [];
+
+  addForm: FormGroup;
 
   constructor(private activeRoute: ActivatedRoute,
               private authService: AuthService,
               public loadingCtrl: LoadingController,
               private platform: Platform,
+              private formBuilder: FormBuilder,
               ) { }
 
               
@@ -47,11 +54,16 @@ export class WorksitePage implements OnInit {
     await this.platform.ready();
     await this.loadWorksite();
     await this.loadWorksiteLocations();
+
+    this.addForm = this.formBuilder.group({
+      name: ['Point #' + (this.worksiteLocations.length + 1), [Validators.required, Validators.minLength(5)]],
+      range: [5, [Validators.required]]
+    });
   }
 
   loadMap(lat, lng) {
     let center: ILatLng = { "lat": lat, "lng": lng };
-    let radius = 50;  // radius (meter)
+    let radius = 50; 
 
     // Calculate the positions
     let positions: ILatLng[] = [0, 90, 180, 270].map((degree: number) => {
@@ -67,7 +79,6 @@ export class WorksitePage implements OnInit {
       }
     });
 
-
     let circle: Circle = this.map.addCircleSync({
       'center': center,
       'radius': radius,
@@ -78,7 +89,6 @@ export class WorksitePage implements OnInit {
    
   }
 
-
   async addTimeClockGeoPoint() {
     //this.map.clear();
 
@@ -86,27 +96,23 @@ export class WorksitePage implements OnInit {
 
     await this.loading.present();
 
-    // Get the location of you
     this.map.getMyLocation().then((location: MyLocation) => {
       this.loading.dismiss();
       //console.log(JSON.stringify(location, null ,2));
 
-      // Move the map camera to the location with animation
       this.map.animateCamera({
         target: location.latLng,
         zoom: 20,
         tilt: 10
       });
 
-      // add a marker
       let marker: Marker = this.map.addMarkerSync({
-        title: 'Clock in/out Point',
+        title: 'GPS point',
         snippet: 'A clock in/out point has been set here.',
         position: location.latLng,
         animation: GoogleMapsAnimation.BOUNCE
       });
 
-      // show the infoWindow
       marker.showInfoWindow();
 
       this.markerArray.push(marker);
@@ -115,6 +121,8 @@ export class WorksitePage implements OnInit {
       this.loading.dismiss();
       //this.showToast(err.error_message);
     });
+
+    this.inForm = true;
   }
 
 
@@ -130,6 +138,12 @@ export class WorksitePage implements OnInit {
       this.worksiteLocations = res;
       this.User = this.authService.getUser();
     })  
+  }
+
+  onGPSSubmit() {
+    console.log(this.addForm.value);
+    this.inForm = false;
+    
   }
 
 

@@ -20,15 +20,64 @@ Editing Worksite # {{ worksite_id }} <br>
   <br>
 </ion-label>
 
-<div id="map_canvas">
+<div id="map_canvas"></div>
+
+<ion-item justify-content-center text-center>
+  <ion-label>You may now stand where you wish to designate a clock in/out GPS point...
+    <ion-button (click)="addTimeClockGeoPoint()">Tap when ready to set GPS</ion-button> 
+  </ion-label>
+</ion-item>
+
+<br>
+<br>
+
+<div [hidden]="!inForm">
+    <ion-grid>
+        <ion-row justify-content-center> 
+          <ion-col size="1"></ion-col>
+          <ion-col size="10">          
+            <ion-card>
+
+              <ion-card-header>
+                <ion-card-title>      
+                  <div text-center><h5>Save?</h5></div>
+                </ion-card-title>
+              </ion-card-header>
+
+              <ion-card-content> 
+                    <form *ngIf="addForm" [formGroup]="addForm" (ngSubmit)="onGPSSubmit()">
+                      <ion-item>
+                        <ion-label position="floating">Name</ion-label>
+                        <ion-input type="text" formControlName="name"></ion-input>
+                      </ion-item>
+                      <ion-item>
+                          <ion-label>Radius</ion-label>
+                          <ion-select placeholder="Select One" formControlName="range">
+                            <ion-select-option value="10">10 Feet</ion-select-option>
+                            <ion-select-option value="15">15 Feet</ion-select-option>
+                            <ion-select-option value="20">20 Feet</ion-select-option>
+                            <ion-select-option value="25">25 Feet</ion-select-option>
+                            <ion-select-option value="30">30 Feet</ion-select-option>
+                            <ion-select-option value="50">50 Feet</ion-select-option>
+                            <ion-select-option value="100">100 Feet</ion-select-option>
+                          </ion-select>
+                      </ion-item>
+                      <br>
+                      <ion-button expand="block" type="submit" [disabled]="!addForm.valid">Save</ion-button>
+                    </form>
+            </ion-card-content>
+
+          </ion-card>
+        </ion-col>
+        <ion-col size="1"></ion-col>   
+      </ion-row>
+    </ion-grid>
 </div>
 
-<ion-button size="small" ion-button (click)="addTimeClockGeoPoint()">Add Time Clock GeoPoint</ion-button>
+<div [hidden]="inForm">
+  Locations:<br>
 
-<br>
-<br>
-Locations:<br>
-
-{{ worksiteLocations | json }}
+  {{ worksiteLocations | json }}
+</div>
 
 </ion-content>
