@@ -23,9 +23,8 @@ Editing Worksite # {{ worksite_id }} <br>
 <div id="map_canvas"></div>
 
 <ion-item justify-content-center text-center>
-  <ion-label>You may now stand where you wish to designate a clock in/out GPS point...
-    <ion-button (click)="addTimeClockGeoPoint()">Tap when ready to set GPS</ion-button> 
-  </ion-label>
+  <ion-label text-wrap>You may now stand where you wish to designate a clock in/out GPS point...</ion-label>
+  <ion-button (click)="addTimeClockGeoPoint()"><ion-icon name="pin"></ion-icon> Tap when ready...</ion-button> 
 </ion-item>
 
 <br>
@@ -63,7 +62,7 @@ Editing Worksite # {{ worksite_id }} <br>
                           </ion-select>
                       </ion-item>
                       <br>
-                      <ion-button expand="block" type="submit" [disabled]="!addForm.valid">Save</ion-button>
+                      <ion-button expand="small" type="submit" [disabled]="!addForm.valid">Save</ion-button>
                     </form>
             </ion-card-content>
 

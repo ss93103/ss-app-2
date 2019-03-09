@@ -31,7 +31,7 @@ export class LoginPage implements OnInit {
  
   ionViewDidEnter() {
     this.sub = this.platform.backButton
-      .subscribe( () => { 
+      .subscribe(() => { 
         this.presentConfirm();
       });
   }
