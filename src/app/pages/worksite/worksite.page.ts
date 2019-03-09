@@ -39,6 +39,7 @@ export class WorksitePage implements OnInit {
   markerArray = [];
 
   addForm: FormGroup;
+  activeLatLng: LatLng = null;
 
   constructor(private activeRoute: ActivatedRoute,
               private authService: AuthService,
@@ -100,6 +101,8 @@ export class WorksitePage implements OnInit {
       this.loading.dismiss();
       //console.log(JSON.stringify(location, null ,2));
 
+      this.activeLatLng = location.latLng;
+
       this.map.animateCamera({
         target: location.latLng,
         zoom: 20,
@@ -141,9 +144,20 @@ export class WorksitePage implements OnInit {
   }
 
   onGPSSubmit() {
-    console.log(this.addForm.value);
+    let o = this.addForm.value;
+
+    o.client_id = this.Worksite.cid;
+    o.worksite_id = this.Worksite.id;
+    o.latitude = this.activeLatLng.lat;
+    o.longitude = this.activeLatLng.lng;
+
+    console.log(o);
+
     this.inForm = false;
-    
+
+    // todo: submit o to server
+    // todo: re-size circle around GPS to match radius select
+
   }
 
 

@@ -45,10 +45,12 @@ Editing Worksite # {{ worksite_id }} <br>
 
               <ion-card-content> 
                     <form *ngIf="addForm" [formGroup]="addForm" (ngSubmit)="onGPSSubmit()">
+
                       <ion-item>
                         <ion-label position="floating">Name</ion-label>
                         <ion-input type="text" formControlName="name"></ion-input>
                       </ion-item>
+
                       <ion-item>
                           <ion-label>Radius</ion-label>
                           <ion-select placeholder="Select One" formControlName="range">
@@ -61,7 +63,9 @@ Editing Worksite # {{ worksite_id }} <br>
                             <ion-select-option value="100">100 Feet</ion-select-option>
                           </ion-select>
                       </ion-item>
+
                       <br>
+                      
                       <ion-button expand="small" type="submit" [disabled]="!addForm.valid">Save</ion-button>
                     </form>
             </ion-card-content>
