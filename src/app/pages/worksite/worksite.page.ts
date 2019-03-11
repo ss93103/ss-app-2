@@ -67,6 +67,12 @@ export class WorksitePage implements OnInit {
     this.authService.logout();
   }
 
+  clearMarkers() {
+    let i = this.markerArray.length;
+    while(i--) this.markerArray[i].remove();
+    this.markerArray = [];
+  }
+
   loadMap(lat, lng) {
     let center: ILatLng = { "lat": lat, "lng": lng };
     let radius = 50; 
@@ -137,15 +143,24 @@ export class WorksitePage implements OnInit {
   loadWorksite() {
     this.authService.getClientWorksite(this.worksite_id).subscribe(async res => {
       this.Worksite = res;
+
       await this.loadMap(this.Worksite.latitude, this.Worksite.longitude);
     })
   }
 
   loadWorksiteLocations() {
-    this.authService.getWorksiteLocations(this.worksite_id).subscribe(res => { 
+    this.authService.getWorksiteLocations(this.worksite_id).subscribe((res:any) => { 
       this.worksiteLocations = res;
       this.User = this.authService.getUser();
-    })  
+      this.clearMarkers();
+
+      for(let l of res) {
+        this.addMarker(l.name, 
+                       'Associates can clock in through their phone app from this point.', 
+                       l.latitude, l.longitude);
+      }
+
+    });  
   }
 
   onGPSSubmit() {
@@ -159,10 +174,13 @@ export class WorksitePage implements OnInit {
     console.log(o);
 
     this.authService.createWorksiteLocation(o)
-    .subscribe((ret:any) => {
+    .subscribe(async (ret:any) => {
       if( ret.status ) {
-        this.showAlert(ret.message);
+        this.showAlert(ret.msg);
+
         this.addMarker('GPS Clock-in Point', 'Associates can now clock in through their phone app from this point.', o.latitude, o.longitude);
+
+        await this.loadWorksiteLocations();
       }
       else {
         this.showAlert(ret.err);
@@ -176,8 +194,15 @@ export class WorksitePage implements OnInit {
 
   }
 
-  deleteLocation(id) {
-    this.authService.deleteWorksiteLocation(id).subscribe(ret => this.showAlert('Worksite Clock In/Out point delete!'));
+  async deleteLocation(id) {
+    this.showAlert('Test')
+    this.authService.deleteWorksiteLocation(id)
+    .subscribe(async (ret) => {
+      console.log(ret)
+      this.showAlert('Worksite Clock In/Out point deleted.');
+      await this.loadWorksiteLocations();
+    });
+ 
   }
 
   addMarker(title, text, lat, lng) {
