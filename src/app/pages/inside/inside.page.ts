@@ -13,7 +13,6 @@ import {
   GoogleMapsAnimation,
   MyLocation,
 } from '@ionic-native/google-maps';
-import { SWITCH_TEMPLATE_REF_FACTORY__POST_R3__ } from '@angular/core/src/linker/template_ref';
 
 @Component({
   selector: 'app-inside',

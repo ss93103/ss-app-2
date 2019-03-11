@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Platform, LoadingController } from '@ionic/angular';
+import { Platform, LoadingController, AlertController } from '@ionic/angular';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
 import {
@@ -46,6 +46,7 @@ export class WorksitePage implements OnInit {
               public loadingCtrl: LoadingController,
               private platform: Platform,
               private formBuilder: FormBuilder,
+              private alertController: AlertController
               ) { }
 
               
@@ -60,6 +61,10 @@ export class WorksitePage implements OnInit {
       name: ['Point #' + (this.worksiteLocations.length + 1), [Validators.required, Validators.minLength(5)]],
       range: [5, [Validators.required]]
     });
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
   loadMap(lat, lng) {
@@ -122,7 +127,7 @@ export class WorksitePage implements OnInit {
     })
     .catch(err => {
       this.loading.dismiss();
-      //this.showToast(err.error_message);
+      this.showAlert(err.error_message);
     });
 
     this.inForm = true;
@@ -153,11 +158,57 @@ export class WorksitePage implements OnInit {
 
     console.log(o);
 
+    this.authService.createWorksiteLocation(o)
+    .subscribe((ret:any) => {
+      if( ret.status ) {
+        this.showAlert(ret.message);
+        this.addMarker('GPS Clock-in Point', 'Associates can now clock in through their phone app from this point.', o.latitude, o.longitude);
+      }
+      else {
+        this.showAlert(ret.err);
+      }
+    });
+
     this.inForm = false;
 
     // todo: submit o to server
     // todo: re-size circle around GPS to match radius select
 
+  }
+
+  deleteLocation(id) {
+    this.authService.deleteWorksiteLocation(id).subscribe(ret => this.showAlert('Worksite Clock In/Out point delete!'));
+  }
+
+  addMarker(title, text, lat, lng) {
+    this.map.addMarker({
+      title: title,
+      snippet: text,
+      icon: 'blue',
+      animation: 'DROP',
+      position: {
+        lat: lat,
+        lng: lng
+     }
+    })
+    .then(marker => {
+      this.markerArray.push(marker);
+
+      marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+        this.showAlert('Marker Clicked');
+      });
+
+    });
+  }
+
+  showAlert(msg) {
+    let alert = this.alertController.create({
+      message: msg,
+      header: 'Attention',
+      buttons: ['OK']
+    });
+
+    alert.then(alert => alert.present());
   }
 
 
