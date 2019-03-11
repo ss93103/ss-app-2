@@ -195,7 +195,7 @@ export class WorksitePage implements OnInit {
   }
 
   async deleteLocation(id) {
-    this.showAlert('Test')
+    //this.showAlert('Test')
     this.authService.deleteWorksiteLocation(id)
     .subscribe(async (ret) => {
       console.log(ret)

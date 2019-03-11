@@ -18,18 +18,18 @@
                 </ion-card-title>
               </ion-card-header>
               
-              <ion-card-content class="white">
+              <ion-card-content>
 
                 <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">                   
-                      <form class="white" [formGroup]="credentialsForm" (ngSubmit)="onSubmit()">
-                        <ion-item class="white">
-                          <ion-label class="white" position="floating">Email</ion-label>
-                          <ion-input class="white" type="email" formControlName="email"></ion-input>
+                      <form [formGroup]="credentialsForm" (ngSubmit)="onSubmit()">
+                        <ion-item>
+                          <ion-label position="floating">Email</ion-label>
+                          <ion-input type="email" formControlName="email"></ion-input>
                         </ion-item>
                     
-                        <ion-item class="white">
-                          <ion-label class="white" position="floating">Password</ion-label>
-                          <ion-input class="white" type="password" formControlName="password"></ion-input>
+                        <ion-item>
+                          <ion-label position="floating">Password</ion-label>
+                          <ion-input type="password" formControlName="password"></ion-input>
                         </ion-item>
                     
                         <br>
@@ -42,10 +42,8 @@
 
             </ion-card-content>
           </ion-card>
-
           </ion-row>
     </ion-grid>
-
 </ion-content>
 
 <ion-footer>
