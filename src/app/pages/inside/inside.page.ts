@@ -135,7 +135,8 @@ export class InsidePage implements OnInit {
   setBounds() {
     if( this.markerArray && this.markerArray.length )
     this.map.animateCamera({
-      target: this.markerArray
+      target: this.markerArray,
+      duration: 1000
     });
   }  
 
@@ -191,7 +192,7 @@ export class InsidePage implements OnInit {
 
       }
 
-      if( bounds && bounds.length > 0 ) this.map.animateCamera({ target: bounds }); // resize map to show all markers
+      if( bounds && bounds.length > 0 ) this.map.animateCamera({ target: bounds, duration: 1000 }); // resize map to show all markers
       
     })
   }

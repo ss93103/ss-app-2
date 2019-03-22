@@ -9,7 +9,6 @@ import {
   GoogleMapsEvent,
   ILatLng,
   Circle,
-  CircleOptions,
   LatLng,
   Marker,
   Spherical,
@@ -28,7 +27,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class WorksitePage implements OnInit {
   @ViewChild('map_canvas') mapElement: ElementRef;
 
-  map: any;
+  map: GoogleMap;
   worksite_id = null;
   worksiteLocations:any = [];
   Worksite:any = { latitude: 0, longitude: 0}
@@ -117,7 +116,8 @@ export class WorksitePage implements OnInit {
       this.map.animateCamera({
         target: location.latLng,
         zoom: 20,
-        tilt: 10
+        tilt: 10,
+        duration: 1000
       });
 
       let marker: Marker = this.map.addMarkerSync({
@@ -195,7 +195,6 @@ export class WorksitePage implements OnInit {
   }
 
   async deleteLocation(id) {
-    //this.showAlert('Test')
     this.authService.deleteWorksiteLocation(id)
     .subscribe(async (ret) => {
       console.log(ret)
