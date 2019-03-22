@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Platform, LoadingController, AlertController } from '@ionic/angular';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import {
   GoogleMaps,
@@ -81,21 +81,13 @@ export class WorksitePage implements OnInit {
       return Spherical.computeOffset(center, radius, degree);
     });
 
-    this.map = GoogleMaps.create('map_canvas', {
+    this.map = GoogleMaps.create(this.mapElement.nativeElement, {
       camera: {
         target: positions,
         padding: 10,
         zoom: 20,
         tilt: 10
       }
-    });
-
-    let circle: Circle = this.map.addCircleSync({
-      'center': center,
-      'radius': radius,
-      'strokeColor' : '#00880050',
-      'strokeWidth': 1,
-      'fillColor' :  '#00880020'
     });
    
   }
@@ -158,6 +150,11 @@ export class WorksitePage implements OnInit {
         this.addMarker(l.name, 
                        'Associates can clock in through their phone app from this point.', 
                        l.latitude, l.longitude);
+
+        this.drawCircleWithRadius({ 
+          position: { lat: l.latitude, lng: l.longitude },
+          range: l.range || 5
+        })
       }
 
     });  
@@ -223,6 +220,26 @@ export class WorksitePage implements OnInit {
       });
 
     });
+  }
+
+  drawCircleWithRadius(data:any) {
+    let center: ILatLng = data.position;
+    let radius = parseInt(data.range) || 10; 
+
+    /*
+    let positions: ILatLng[] = [0, 90, 180, 270].map((degree: number) => {
+      return Spherical.computeOffset(center, radius, degree);
+    });
+    */
+
+    let circle: Circle = this.map.addCircleSync({
+      'center': center,
+      'radius': radius,
+      'strokeColor' : '#00880050',
+      'strokeWidth': 1,
+      'fillColor' :  '#00880020'
+    });
+
   }
 
   showAlert(msg) {
