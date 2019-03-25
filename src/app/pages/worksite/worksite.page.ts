@@ -99,17 +99,19 @@ export class WorksitePage implements OnInit {
     await this.loading.present();
 
     let geoLocOptions = { 
-      maximumAge: 0,              // do NOT used any cached GPS data... sigh -Lawrence
+      maximumAge: 0,              // do NOT used any cached GPS data... -Lawrence
       timeout: 10 * 1000,         // this will trigger geolocationError if > n seconds...
-      enableHighAccuracy: true    // for this stuff, YES...
+      enableHighAccuracy: true    // for this, YES...
     }
 
     this.geolocation.getCurrentPosition(geoLocOptions)
     .then((data) => {
         this.loading.dismiss();
 
+        this.activeLatLng = new LatLng(data.coords.latitude, data.coords.longitude);
+
         this.map.animateCamera({
-          target: { lat: data.coords.latitude, lng: data.coords.longitude },
+          target: this.activeLatLng,
           zoom: 20,
           tilt: 10,
           duration: 1000
@@ -126,39 +128,9 @@ export class WorksitePage implements OnInit {
         this.markerArray.push(marker);
     })
     .catch((err) => {
+        this.loading.dismiss();
         this.showAlert(JSON.stringify(err, null, 2));
     })
-    
-    /*
-    this.map.getMyLocation(o).then((location: MyLocation) => {
-      this.loading.dismiss();
-      //console.log(JSON.stringify(location, null ,2));
-
-      this.activeLatLng = location.latLng;
-
-      this.map.animateCamera({
-        target: location.latLng,
-        zoom: 20,
-        tilt: 10,
-        duration: 1000
-      });
-
-      let marker: Marker = this.map.addMarkerSync({
-        title: 'GPS point',
-        snippet: 'A clock in/out point has been set here.',
-        position: location.latLng,
-        animation: GoogleMapsAnimation.BOUNCE
-      });
-
-      marker.showInfoWindow();
-
-      this.markerArray.push(marker);
-    })
-    .catch(err => {
-      this.loading.dismiss();
-      this.showAlert(err.error_message);
-    });
-    */
 
     this.inForm = true;
   }
@@ -206,9 +178,7 @@ export class WorksitePage implements OnInit {
     .subscribe(async (ret:any) => {
       if( ret.status ) {
         this.showAlert(ret.msg);
-
         this.addMarker('GPS Clock-in Point', 'Associates can now clock in through their phone app from this point.', o.latitude, o.longitude);
-
         await this.loadWorksiteLocations();
       }
       else {
@@ -217,10 +187,6 @@ export class WorksitePage implements OnInit {
     });
 
     this.inForm = false;
-
-    // todo: submit o to server
-    // todo: re-size circle around GPS to match radius select
-
   }
 
   async deleteLocation(id) {
