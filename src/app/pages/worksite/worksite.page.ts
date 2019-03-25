@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Platform, LoadingController, AlertController } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -12,9 +13,7 @@ import {
   LatLng,
   Marker,
   Spherical,
-  GoogleMapsAnimation,
-  MyLocation,
-  MyLocationOptions
+  GoogleMapsAnimation
 } from '@ionic-native/google-maps';
 
 import { AuthService } from 'src/app/services/auth.service';
@@ -42,6 +41,7 @@ export class WorksitePage implements OnInit {
   activeLatLng: LatLng = null;
 
   constructor(private activeRoute: ActivatedRoute,
+              private geolocation: Geolocation,
               private authService: AuthService,
               public loadingCtrl: LoadingController,
               private platform: Platform,
@@ -94,14 +94,42 @@ export class WorksitePage implements OnInit {
   }
 
   async addTimeClockGeoPoint() {
-    //this.map.clear();
-
     this.loading = await this.loadingCtrl.create({ message: 'One moment, getting your location...' });
 
     await this.loading.present();
-    
-    let o:MyLocationOptions = { enableHighAccuracy: true }
 
+    let geoLocOptions = { 
+      maximumAge: 0,              // do NOT used any cached GPS data... sigh -Lawrence
+      timeout: 10 * 1000,         // this will trigger geolocationError if > n seconds...
+      enableHighAccuracy: true    // for this stuff, YES...
+    }
+
+    this.geolocation.getCurrentPosition(geoLocOptions)
+    .then((data) => {
+        this.loading.dismiss();
+
+        this.map.animateCamera({
+          target: { lat: data.coords.latitude, lng: data.coords.longitude },
+          zoom: 20,
+          tilt: 10,
+          duration: 1000
+        });
+
+        let marker: Marker = this.map.addMarkerSync({
+          title: 'GPS point',
+          snippet: 'A clock in/out point has been set here.',
+          position: { lat: data.coords.latitude, lng: data.coords.longitude },
+          animation: GoogleMapsAnimation.BOUNCE
+        });
+        
+        marker.showInfoWindow();
+        this.markerArray.push(marker);
+    })
+    .catch((err) => {
+        this.showAlert(JSON.stringify(err, null, 2));
+    })
+    
+    /*
     this.map.getMyLocation(o).then((location: MyLocation) => {
       this.loading.dismiss();
       //console.log(JSON.stringify(location, null ,2));
@@ -130,6 +158,7 @@ export class WorksitePage implements OnInit {
       this.loading.dismiss();
       this.showAlert(err.error_message);
     });
+    */
 
     this.inForm = true;
   }
