@@ -14,6 +14,7 @@ import {
   Spherical,
   GoogleMapsAnimation,
   MyLocation,
+  MyLocationOptions
 } from '@ionic-native/google-maps';
 
 import { AuthService } from 'src/app/services/auth.service';
@@ -98,8 +99,10 @@ export class WorksitePage implements OnInit {
     this.loading = await this.loadingCtrl.create({ message: 'One moment, getting your location...' });
 
     await this.loading.present();
+    
+    let o:MyLocationOptions = { enableHighAccuracy: true }
 
-    this.map.getMyLocation().then((location: MyLocation) => {
+    this.map.getMyLocation(o).then((location: MyLocation) => {
       this.loading.dismiss();
       //console.log(JSON.stringify(location, null ,2));
 
