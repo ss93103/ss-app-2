@@ -1,8 +1,35 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
+@font-face {
+  font-family: 'Open Sans', sans-serif;
+  // src:url('../../../assets/fonts/Heebo.woff2');
+}
 
+p,ion-item,h1,h2,h5,ion-title,ion-label,ion-title,b{
+  font-family: 'Open Sans' !important;
+  font-weight: 300;
+  font-size: large;
+  text-align: justify;
+}
+ion-content{
+    --background: #fff url('../../../assets/hs_semiopaque.jpg') no-repeat center center / cover;
+}
+.loginclass {
+  background-color: transparent !important;
+}
+.emailinput {
+  background: red;
+}
+.copyright {
+  font-size: 10px;
+  background-color: grey !important;
+}
 .black {
     background-color: grey !important;
 }
 
 .white {
     background-color: whitesmoke !important;
+}
+.item.item-input {
+    background-color: transparent;
 }
