@@ -1,5 +1,3 @@
-# ss-app-2
-StaffSetter GeoSetter for Clients
+# GeoSetter Client App
 
-
-Client-facing geolocation app.
+Client-facing geolocation app for the StaffSetter platform.
