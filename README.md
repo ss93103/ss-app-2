@@ -1,5 +1,5 @@
 # ss-app-2
-StaffSetter Client App 
+StaffSetter GeoSetter for Clients
 
 
-Welcome to Phone Apps. :)
+Client-facing geolocation app.
