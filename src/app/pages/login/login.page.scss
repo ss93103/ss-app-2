@@ -17,20 +17,18 @@ ion-content{
 .loginclass {
   background-color: transparent !important;
 }
-.emailinput {
-  background: red;
+.email-login{
+  --padding-bottom: 0px;
+  --padding-top: 0px;
+}
+.login-card {
+  margin-top:90px;
 }
 .copyright {
-  font-size: 10px;
-  background-color: grey !important;
-}
-.black {
-    background-color: grey !important;
+  font-size: 12px;
+  background-color: transparent !important;
 }
 
-.white {
-    background-color: whitesmoke !important;
-}
 .item.item-input {
     background-color: transparent;
 }

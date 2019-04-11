@@ -4,12 +4,12 @@
   </ion-toolbar>
 </ion-header> -->
 
-<ion-content padding class="loginclass">
+<ion-content padding>
     <ion-grid>
         <ion-row justify-content-center>
 
-            <ion-card>
-              <div text-center><ion-img [src]="'assets/logo_350.png'"></ion-img></div>
+            <ion-card class="login-card">
+              <div text-center><ion-img [src]="'assets/logo_700.png'" style="max-width:350px;"></ion-img></div>
               <!-- <ion-card-header class="loginclass">
                 <ion-card-subtitle>
                     <div text-center><ion-img [src]="'assets/ss_logo.png'"></ion-img></div>
@@ -25,7 +25,7 @@
                       <form [formGroup]="credentialsForm" (ngSubmit)="onSubmit()">
                         <ion-item>
                           <ion-label position="floating">Email</ion-label>
-                          <ion-input type="email" formControlName="email"></ion-input>
+                          <ion-input class="email-login" type="email" formControlName="email"></ion-input>
                         </ion-item>
 
                         <ion-item>
@@ -49,6 +49,6 @@
 
 <ion-footer>
     <ion-toolbar>
-      <ion-title text-center class="copyright">StaffSetter, LLC 2019</ion-title>
+      <ion-title text-center class="copyright">© StaffSetter, LLC 2019</ion-title>
     </ion-toolbar>
   </ion-footer>
