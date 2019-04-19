@@ -1,5 +1,51 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
+@font-face {
+  font-family: 'Open Sans', sans-serif;
+  // src:url('../../../assets/fonts/Heebo.woff2');
+}
+
+p,ion-item,h1,h2,h5,ion-title,ion-label,ion-title,b{
+  font-family: 'Open Sans' !important;
+  font-weight: 300;
+  font-size: large;
+  text-align: justify;
+}
+.clientname{
+  font-family: 'Open Sans' !important;
+ font-weight: 400;
+ font-size:16px;
+ color: black;
+}
+.streetname{
+  font-family: 'Open Sans' !important;
+ font-weight: 400;
+ font-size:16px;
+ color:black;
+}
+.user{
+  font-family: 'Open Sans' !important;
+ font-weight: 400;
+ font-size: 13px;
+ color:black;
+}
+ion-item{
+  color: white;
+  background-color: white;
+}
+ion-item-divider{
+  border: 1px solid rgb(203, 201, 206);
+}
 #map_canvas {
     width: 100%;
     height: 40%;
     border: 1px solid rgb(203, 201, 206);
   }
+
+  ion-content{
+      --background: #fff url('../../../assets/greyzz.png') repeat;
+
+  }
+
+.toolbar{
+  background-color: #e0e0e0;
+}
